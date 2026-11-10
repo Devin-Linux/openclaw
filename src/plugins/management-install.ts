@@ -9,6 +9,7 @@ import { buildNpmResolutionFields, type NpmSpecResolution } from "../infra/insta
 import { parseRegistryNpmSpec } from "../infra/npm-registry-spec.js";
 import { normalizeUpdateChannel, resolveRegistryUpdateChannel } from "../infra/update-channels.js";
 import type { RuntimeEnv } from "../runtime.js";
+import type { InstallPolicySource } from "../security/install-policy.js";
 import { resolveCompatibilityHostVersion, VERSION } from "../version.js";
 import { installBundledPluginSource } from "./bundled-install.js";
 import type { BundledPluginSource } from "./bundled-sources.js";
@@ -65,6 +66,8 @@ export type ManagedPluginSourceInstallRequest =
       path: string;
       /** Stable source provenance when installing an owner-verified temporary copy. */
       recordPath?: string;
+      expectedIntegrity?: string;
+      policySource?: InstallPolicySource;
       recordSource: "archive" | "path";
       mode: "install" | "update";
       link?: boolean;
@@ -250,6 +253,8 @@ export type ManagedPluginInstallOptions = Omit<
   snapshot?: ConfigSnapshotForInstallPersist;
   signal?: AbortSignal;
   confirmInstall?: (warning?: string) => Promise<boolean>;
+  /** Host-owned provenance for an immutable local artifact staged from another package. */
+  localArtifact?: { sourcePath: string; integrity: string; policySource: InstallPolicySource };
 };
 
 export async function installManagedPluginSource(
@@ -433,6 +438,11 @@ async function installResolvedManagedPluginSource(
   const common = requestDeferredPluginInstall(
     {
       ...params.safetyOverrides,
+      ...(request.source === "local" && request.policySource
+        ? {
+            installPolicyRequest: { kind: "plugin-archive" as const, source: request.policySource },
+          }
+        : {}),
       config: params.snapshot.config,
       extensionsDir,
       logger: params.logger,
@@ -542,6 +552,7 @@ async function installResolvedManagedPluginSource(
           sourcePath: request.recordPath ?? request.path,
           installPath: installPath ?? result.targetDir,
           version: result.version,
+          ...(request.expectedIntegrity ? { integrity: request.expectedIntegrity } : {}),
         }),
       },
     );
