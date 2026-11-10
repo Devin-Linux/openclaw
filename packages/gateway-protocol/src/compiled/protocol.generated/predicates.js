@@ -1664,7 +1664,7 @@ var External = [
     /(^allowModelOverride$|^allowedModels$|^allowedCompletionModels$|^allowAuthProfileOverride$|^allowAgentIdOverride$)/u,
     /(^allowModelOverride$|^allowedModels$)/u,
     /^.*$/u,
-    /(^actionId$|^ref$|^reviewToken$|^acknowledgeRiskWarning$)/u,
+    /(^actionId$|^source$|^ref$|^reviewToken$|^acknowledgeRiskWarning$)/u,
     /(^actionId$|^source$|^path$|^digest$|^reviewToken$|^acknowledgeRiskWarning$)/u,
     /^sha256-[A-Za-z0-9+/]{43}=$/u,
     /(^agentId$|^source$)/u,
@@ -1686,7 +1686,7 @@ var External = [
     /(^kind$|^id$|^action$|^reason$)/u,
     /(^actionId$|^pluginId$|^ref$|^version$|^ownerAction$|^integrity$|^declaredCapabilities$|^capabilityGrants$|^capabilityGrantsByPluginId$|^reviewToken$|^riskWarning$)/u,
     /(^channels$|^providers$|^tools$|^contracts$|^hooks$|^mcpServers$|^cliCommands$|^cliBackends$|^skills$|^dangerousConfigFlags$)/u,
-    /(^actionId$|^ref$|^version$|^integrity$|^riskWarning$|^reviewToken$)/u,
+    /(^actionId$|^source$|^ref$|^version$|^integrity$|^riskWarning$|^reviewToken$)/u,
     /(^actionId$|^source$|^path$|^name$|^digest$|^riskWarning$|^reviewToken$)/u,
     /(^code$|^path$|^message$)/u,
     /(^source$|^manifestJson$)/u,
@@ -20324,6 +20324,7 @@ var External = [
     value !== null &&
     !Array.isArray(value) &&
     "actionId" in value &&
+    "source" in value &&
     "ref" in value &&
     "reviewToken" in value &&
     "acknowledgeRiskWarning" in value &&
@@ -20331,6 +20332,7 @@ var External = [
       (unique_2070, unique_2071) => External[1041].test(unique_2070) || check_2(value[unique_2070]),
     ) &&
     check_6(value.actionId) &&
+    check_258(value.source) &&
     check_6(value.ref) &&
     check_6(value.reviewToken) &&
     check_391(value.acknowledgeRiskWarning),
@@ -20734,6 +20736,7 @@ var External = [
     value !== null &&
     !Array.isArray(value) &&
     "actionId" in value &&
+    "source" in value &&
     "ref" in value &&
     "version" in value &&
     "integrity" in value &&
@@ -20743,6 +20746,7 @@ var External = [
       (unique_2117, unique_2118) => External[1063].test(unique_2117) || check_2(value[unique_2117]),
     ) &&
     check_6(value.actionId) &&
+    check_258(value.source) &&
     check_6(value.ref) &&
     check_6(value.version) &&
     check_6(value.integrity) &&
