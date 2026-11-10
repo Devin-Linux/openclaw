@@ -1,0 +1,2 @@
+8
+# Publish the resume-child exit marker atomically so filesystem notifications cannot expose an empty PID.
