@@ -1666,7 +1666,7 @@ var External = [
     /^.*$/u,
     /(^actionId$|^source$|^ref$|^reviewToken$|^acknowledgeRiskWarning$)/u,
     /(^actionId$|^source$|^path$|^digest$|^reviewToken$|^acknowledgeRiskWarning$)/u,
-    /^sha256-[A-Za-z0-9+/]{43}=$/u,
+    /^sha256:[a-f0-9]{64}$/u,
     /(^agentId$|^source$)/u,
     /(^agentId$|^source$|^planIntegrity$|^acknowledgeClawHubRisk$|^acknowledgeCapabilities$|^acknowledgeSkillWarnings$)/u,
     /(^agentId$|^planIntegrity$)/u,
@@ -1682,6 +1682,7 @@ var External = [
     /(^type$|^relationship$|^origin$|^independentOwner$|^affectedTemplateCount$)/u,
     /(^type$|^current$|^desired$|^ownership$)/u,
     /(^source$|^ref$|^version$|^integrity$)/u,
+    /^sha256-[A-Za-z0-9+/]{43}=$/u,
     /(^source$|^path$|^name$|^digest$)/u,
     /(^kind$|^id$|^action$|^reason$)/u,
     /(^actionId$|^pluginId$|^ref$|^version$|^ownerAction$|^integrity$|^declaredCapabilities$|^capabilityGrants$|^capabilityGrantsByPluginId$|^reviewToken$|^riskWarning$)/u,
@@ -1691,7 +1692,6 @@ var External = [
     /(^code$|^path$|^message$)/u,
     /(^source$|^manifestJson$)/u,
     /(^packageName$|^version$|^integrity$|^byteLength$)/u,
-    /^sha256:[a-f0-9]{64}$/u,
     /(^coverage$|^current$|^desired$|^unresolved$)/u,
     /(^tools$|^sandbox$|^filesystem$|^heartbeat$|^memorySearch$|^subagentTargets$)/u,
     /(^allowed$|^excluded$|^explicitAllow$|^explicitDeny$)/u,
@@ -20427,14 +20427,14 @@ var External = [
     check_6(value.planIntegrity) &&
     check_3063(value.target) &&
     check_3064(value.actions) &&
-    check_3090(value.capabilities) &&
-    check_3092(value.pluginReviews) &&
-    check_3097(value.skillReviews) &&
-    check_3101(value.blockers) &&
+    check_3091(value.capabilities) &&
+    check_3093(value.pluginReviews) &&
+    check_3098(value.skillReviews) &&
+    check_3102(value.blockers) &&
     (value.trustWarning === void 0 || !("trustWarning" in value) || check_63(value.trustWarning)) &&
     (value.manifestDisclosure === void 0 ||
       !("manifestDisclosure" in value) ||
-      check_3103(value.manifestDisclosure)) &&
+      check_3104(value.manifestDisclosure)) &&
     check_97(value.riskAcknowledgementRequired) &&
     (value.configuredAccess === void 0 ||
       !("configuredAccess" in value) ||
@@ -20621,7 +20621,7 @@ var External = [
     (value.desired === void 0 || !("desired" in value) || check_3087(value.desired)) &&
     (value.ownership === void 0 || !("ownership" in value) || check_3080(value.ownership)),
   check_3086 = (value) => typeof value == "string" && value === "skill-package",
-  check_3087 = (value) => check_3088(value) || check_3089(value),
+  check_3087 = (value) => check_3088(value) || check_3090(value),
   check_3088 = (value) =>
     typeof value == "object" &&
     value !== null &&
@@ -20636,8 +20636,9 @@ var External = [
     check_258(value.source) &&
     check_6(value.ref) &&
     check_6(value.version) &&
-    check_3051(value.integrity),
-  check_3089 = (value) =>
+    check_3089(value.integrity),
+  check_3089 = (value) => typeof value == "string" && External[1059].test(value),
+  check_3090 = (value) =>
     typeof value == "object" &&
     value !== null &&
     !Array.isArray(value) &&
@@ -20646,15 +20647,15 @@ var External = [
     "name" in value &&
     "digest" in value &&
     Object.getOwnPropertyNames(value).every(
-      (unique_2106, unique_2107) => External[1059].test(unique_2106) || check_2(value[unique_2106]),
+      (unique_2106, unique_2107) => External[1060].test(unique_2106) || check_2(value[unique_2106]),
     ) &&
     check_1138(value.source) &&
     check_6(value.path) &&
     check_6(value.name) &&
     check_3051(value.digest),
-  check_3090 = (value) =>
-    Array.isArray(value) && value.every((unique_2108, index) => check_3091(unique_2108)),
   check_3091 = (value) =>
+    Array.isArray(value) && value.every((unique_2108, index) => check_3092(unique_2108)),
+  check_3092 = (value) =>
     typeof value == "object" &&
     value !== null &&
     !Array.isArray(value) &&
@@ -20663,15 +20664,15 @@ var External = [
     "action" in value &&
     "reason" in value &&
     Object.getOwnPropertyNames(value).every(
-      (unique_2109, unique_2110) => External[1060].test(unique_2109) || check_2(value[unique_2109]),
+      (unique_2109, unique_2110) => External[1061].test(unique_2109) || check_2(value[unique_2109]),
     ) &&
     check_6(value.kind) &&
     check_6(value.id) &&
     check_6(value.action) &&
     check_6(value.reason),
-  check_3092 = (value) =>
-    Array.isArray(value) && value.every((unique_2111, index) => check_3093(unique_2111)),
   check_3093 = (value) =>
+    Array.isArray(value) && value.every((unique_2111, index) => check_3094(unique_2111)),
+  check_3094 = (value) =>
     typeof value == "object" &&
     value !== null &&
     !Array.isArray(value) &&
@@ -20686,22 +20687,22 @@ var External = [
     "capabilityGrantsByPluginId" in value &&
     "reviewToken" in value &&
     Object.getOwnPropertyNames(value).every(
-      (unique_2112, unique_2113) => External[1061].test(unique_2112) || check_2(value[unique_2112]),
+      (unique_2112, unique_2113) => External[1062].test(unique_2112) || check_2(value[unique_2112]),
     ) &&
     check_6(value.actionId) &&
     check_6(value.pluginId) &&
     check_6(value.ref) &&
     check_6(value.version) &&
-    check_3094(value.ownerAction) &&
-    check_3051(value.integrity) &&
-    check_3096(value.declaredCapabilities) &&
+    check_3095(value.ownerAction) &&
+    check_3089(value.integrity) &&
+    check_3097(value.declaredCapabilities) &&
     check_3041(value.capabilityGrants) &&
     check_3046(value.capabilityGrantsByPluginId) &&
     check_6(value.reviewToken) &&
     (value.riskWarning === void 0 || !("riskWarning" in value) || check_63(value.riskWarning)),
-  check_3094 = (value) => check_1151(value) || check_3095(value),
-  check_3095 = (value) => typeof value == "string" && value === "reuse",
-  check_3096 = (value) =>
+  check_3095 = (value) => check_1151(value) || check_3096(value),
+  check_3096 = (value) => typeof value == "string" && value === "reuse",
+  check_3097 = (value) =>
     typeof value == "object" &&
     value !== null &&
     !Array.isArray(value) &&
@@ -20716,7 +20717,7 @@ var External = [
     "skills" in value &&
     "dangerousConfigFlags" in value &&
     Object.getOwnPropertyNames(value).every(
-      (unique_2114, unique_2115) => External[1062].test(unique_2114) || check_2(value[unique_2114]),
+      (unique_2114, unique_2115) => External[1063].test(unique_2114) || check_2(value[unique_2114]),
     ) &&
     check_747(value.channels) &&
     check_747(value.providers) &&
@@ -20728,10 +20729,10 @@ var External = [
     check_747(value.cliBackends) &&
     check_747(value.skills) &&
     check_747(value.dangerousConfigFlags),
-  check_3097 = (value) =>
-    Array.isArray(value) && value.every((unique_2116, index) => check_3098(unique_2116)),
-  check_3098 = (value) => check_3099(value) || check_3100(value),
-  check_3099 = (value) =>
+  check_3098 = (value) =>
+    Array.isArray(value) && value.every((unique_2116, index) => check_3099(unique_2116)),
+  check_3099 = (value) => check_3100(value) || check_3101(value),
+  check_3100 = (value) =>
     typeof value == "object" &&
     value !== null &&
     !Array.isArray(value) &&
@@ -20743,7 +20744,7 @@ var External = [
     "riskWarning" in value &&
     "reviewToken" in value &&
     Object.getOwnPropertyNames(value).every(
-      (unique_2117, unique_2118) => External[1063].test(unique_2117) || check_2(value[unique_2117]),
+      (unique_2117, unique_2118) => External[1064].test(unique_2117) || check_2(value[unique_2117]),
     ) &&
     check_6(value.actionId) &&
     check_258(value.source) &&
@@ -20752,7 +20753,7 @@ var External = [
     check_6(value.integrity) &&
     check_6(value.riskWarning) &&
     check_6(value.reviewToken),
-  check_3100 = (value) =>
+  check_3101 = (value) =>
     typeof value == "object" &&
     value !== null &&
     !Array.isArray(value) &&
@@ -20764,7 +20765,7 @@ var External = [
     "riskWarning" in value &&
     "reviewToken" in value &&
     Object.getOwnPropertyNames(value).every(
-      (unique_2119, unique_2120) => External[1064].test(unique_2119) || check_2(value[unique_2119]),
+      (unique_2119, unique_2120) => External[1065].test(unique_2119) || check_2(value[unique_2119]),
     ) &&
     check_6(value.actionId) &&
     check_1138(value.source) &&
@@ -20773,9 +20774,9 @@ var External = [
     check_3051(value.digest) &&
     check_6(value.riskWarning) &&
     check_6(value.reviewToken),
-  check_3101 = (value) =>
-    Array.isArray(value) && value.every((unique_2121, index) => check_3102(unique_2121)),
   check_3102 = (value) =>
+    Array.isArray(value) && value.every((unique_2121, index) => check_3103(unique_2121)),
+  check_3103 = (value) =>
     typeof value == "object" &&
     value !== null &&
     !Array.isArray(value) &&
@@ -20783,23 +20784,23 @@ var External = [
     "path" in value &&
     "message" in value &&
     Object.getOwnPropertyNames(value).every(
-      (unique_2122, unique_2123) => External[1065].test(unique_2122) || check_2(value[unique_2122]),
+      (unique_2122, unique_2123) => External[1066].test(unique_2122) || check_2(value[unique_2122]),
     ) &&
     check_6(value.code) &&
     check_6(value.path) &&
     check_6(value.message),
-  check_3103 = (value) =>
+  check_3104 = (value) =>
     typeof value == "object" &&
     value !== null &&
     !Array.isArray(value) &&
     "source" in value &&
     "manifestJson" in value &&
     Object.getOwnPropertyNames(value).every(
-      (unique_2124, unique_2125) => External[1066].test(unique_2124) || check_2(value[unique_2124]),
+      (unique_2124, unique_2125) => External[1067].test(unique_2124) || check_2(value[unique_2124]),
     ) &&
-    check_3104(value.source) &&
+    check_3105(value.source) &&
     check_6(value.manifestJson),
-  check_3104 = (value) =>
+  check_3105 = (value) =>
     typeof value == "object" &&
     value !== null &&
     !Array.isArray(value) &&
@@ -20808,13 +20809,12 @@ var External = [
     "integrity" in value &&
     "byteLength" in value &&
     Object.getOwnPropertyNames(value).every(
-      (unique_2126, unique_2127) => External[1067].test(unique_2126) || check_2(value[unique_2126]),
+      (unique_2126, unique_2127) => External[1068].test(unique_2126) || check_2(value[unique_2126]),
     ) &&
     check_2972(value.packageName) &&
     check_6(value.version) &&
-    check_3105(value.integrity) &&
+    check_3051(value.integrity) &&
     check_618(value.byteLength),
-  check_3105 = (value) => typeof value == "string" && External[1068].test(value),
   check_3106 = (value) =>
     typeof value == "object" &&
     value !== null &&
