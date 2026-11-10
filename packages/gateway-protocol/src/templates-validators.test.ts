@@ -164,7 +164,7 @@ describe("Templates Gateway contract", () => {
     });
   });
 
-  it("requires exact plugin artifact integrity in an install review", () => {
+  it("validates registry integrity and bundled plugin digests by source", () => {
     const grants = {
       hooks: {
         allowPromptInjection: { effective: false },
@@ -174,6 +174,7 @@ describe("Templates Gateway contract", () => {
     const pluginReview = {
       actionId: "plugin:@openclaw/lobster",
       pluginId: "lobster",
+      source: "clawhub",
       ref: "@openclaw/lobster",
       version: "2026.9.7",
       ownerAction: "install",
@@ -200,6 +201,15 @@ describe("Templates Gateway contract", () => {
     const { integrity: _integrity, ...withoutIntegrity } = pluginReview;
     rejectPlan({ ...plan, pluginReviews: [withoutIntegrity] });
     rejectPlan({ ...plan, pluginReviews: [{ ...pluginReview, integrity: "sha256-not-a-digest" }] });
+    const { ref: _ref, version: _version, integrity: _artifact, ...shared } = pluginReview;
+    const bundled = {
+      ...shared,
+      source: "bundled",
+      path: "plugins/lobster",
+      digest: `sha256:${"a".repeat(64)}`,
+    };
+    checkPlan({ ...basePlan, pluginReviews: [bundled] });
+    rejectPlan({ ...basePlan, pluginReviews: [{ ...bundled, digest: pluginReview.integrity }] });
   });
 
   it("accepts bundled skill warning acknowledgements with native hexadecimal digests", () => {
