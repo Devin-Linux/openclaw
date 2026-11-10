@@ -346,8 +346,8 @@ describe("native Codex skill delivery", () => {
             expect(text.lastIndexOf(editedSoul)).toBeGreaterThan(text.lastIndexOf(firstSoul));
           }
         } else {
-          // Resume replaces the current section; historical turns may still
-          // contain old text, so inspect the latest policy handoff.
+          // History may retain old persona. Select the latest policy by surviving
+          // shared USER.md content, not incidental handoff notice wording.
           const latestDeveloper = fixture.requests.at(-1)?.input;
           expect(Array.isArray(latestDeveloper)).toBe(true);
           const handoffs = Array.isArray(latestDeveloper)
@@ -355,7 +355,7 @@ describe("native Codex skill delivery", () => {
                 (item) =>
                   isJsonObject(item) &&
                   item.role === "developer" &&
-                  JSON.stringify(item).includes("complete current OpenClaw"),
+                  JSON.stringify(item).includes(sharedUser),
               )
             : [];
           expect(handoffs.length).toBeGreaterThan(0);
