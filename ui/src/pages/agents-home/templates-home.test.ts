@@ -863,6 +863,7 @@ describe("Templates discovery", () => {
   it.each([
     { kind: "plugin", bundled: false },
     { kind: "skill", bundled: false },
+    { kind: "plugin", bundled: true },
     { kind: "skill", bundled: true },
   ] as const)(
     "asks before applying a $kind review plan (bundled=$bundled)",
@@ -883,7 +884,9 @@ describe("Templates discovery", () => {
       await vi.waitFor(() =>
         expect(detail.querySelector(".templates-add-consent")?.textContent).toContain(
           bundled
-            ? "research"
+            ? kind === "plugin"
+              ? "workflow-tools"
+              : "research"
             : kind === "plugin"
               ? "@openclaw/workflow-tools"
               : "@openclaw/research",
